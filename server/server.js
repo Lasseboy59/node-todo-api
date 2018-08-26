@@ -39,6 +39,27 @@ app.get('/todos', (req, res) => {
 
 
 // GET /todos/123456
+// id='5b827c5c36b0c04e07f808ee'  // mail from Postman
+app.get('/todos/:id', (req, res) => {
+  var id = req.params.id;
+
+  if(!ObjectID.isValid(id)) {
+    return res.status(404).send('');
+  }
+
+  Todo.findById(id).then((todo) => {
+    if(!todo){
+      return res.status(404).send();
+    }
+    res.send({todo});
+    console.log(JSON.stringify(todo,undefined,2));
+  }).catch((e) => {
+    res.status(404).send();
+  });
+
+});
+
+// GET /users/123456
 // id='5b7fbfdc994aa21e0730ef38' name='Timo'
 app.get('/users/:id', (req, res) => {
   var id = req.params.id;
@@ -56,12 +77,6 @@ app.get('/users/:id', (req, res) => {
   }).catch((e) => {
     res.status(404).send();
   });
-  //   if(!user) {
-  //     return res.status(400).send('');
-  //   }
-  //   // console.log('User by id', user);
-  //   console.log(JSON.stringify(user,undefined,2));
-  // }).catch((e) => console.log(e));
 
 });
 
