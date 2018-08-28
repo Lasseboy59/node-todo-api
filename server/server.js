@@ -32,16 +32,6 @@ app.get('/todos', (req, res) => {
 });
 
 
-
-// THIS WORKS
-// // GET /todos/123  localhost:3000/todos/123
-// app.get('/users/:id', (req, res) => {
-//   res.send(req.params);
-// });
-
-
-// GET /todos/123456
-// id='5b827c5c36b0c04e07f808ee'  // mail from Postman
 app.get('/todos/:id', (req, res) => {
   var id = req.params.id;
 
@@ -54,15 +44,33 @@ app.get('/todos/:id', (req, res) => {
       return res.status(404).send();
     }
     res.send({todo});
-    console.log(JSON.stringify(todo,undefined,2));
+    // console.log(JSON.stringify(todo,undefined,2));
   }).catch((e) => {
     res.status(404).send();
   });
 
 });
 
-// GET /users/123456
-// id='5b7fbfdc994aa21e0730ef38' name='Timo'
+
+app.delete('/todos/:id', (req, res) => {
+  var id = req.params.id;
+
+  if(!ObjectID.isValid(id)) {
+    return res.status(404).send('');
+  }
+
+  Todo.findByIdAndRemove(id).then((todo) => {
+    if(!todo){
+      return res.status(404).send();
+    }
+
+    res.send({todo});
+
+  }).catch((e) => {
+    res.status(404).send();
+  });
+});
+
 app.get('/users/:id', (req, res) => {
   var id = req.params.id;
 
@@ -82,20 +90,8 @@ app.get('/users/:id', (req, res) => {
 
 });
 
-
 app.listen(port, () => {
   console.log(`Started on port ${port} `);
 });
 
 module.exports = {app};
-
-// app.post('/users', (req, res) => {
-//   var user = new User({
-//     email: req.body.email
-//   });
-//   user.save().then((doc) => {
-//     res.send(doc);
-//   }, (e) => {
-//     res.status(400).send(e);
-//   });
-// });
