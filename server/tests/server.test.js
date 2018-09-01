@@ -193,10 +193,10 @@ describe('GET /user/me', () => {
     .end(done);
   });
 
-  it('should return 401 / 500 if not authenticated', (done) => {
+  it('should return 401 if not authenticated', (done) => {
     request(app)
       .get('/users/me')
-      .expect(500)
+      .expect(401)
       .expect((res) => {
         expect(res.body).toEqual({});
       })
